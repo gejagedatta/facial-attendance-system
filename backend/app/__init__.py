@@ -57,8 +57,8 @@ def create_app():
     # ========================
     # CREATE DATABASE TABLES
     # ========================
-    with app.app_context():
-        db.create_all()
+    #with app.app_context():
+        #db.create_all()
 
     # ========================
     # REGISTER BLUEPRINTS
