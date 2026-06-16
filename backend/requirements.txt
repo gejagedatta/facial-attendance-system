@@ -11,3 +11,4 @@ openpyxl
 reportlab
 pillow
 python-dotenv
+gunicorn
