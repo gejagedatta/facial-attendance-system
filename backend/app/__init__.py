@@ -18,39 +18,34 @@ def create_app():
     # ========================
     # DATABASE CONFIG
     # ========================
+    DATABASE_URL = os.getenv("MYSQL_PUBLIC_URL")
 
-DATABASE_URL = os.getenv("MYSQL_PUBLIC_URL")
-
-app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
     # ========================
     # JWT CONFIG
     # ========================
-
     app.config["JWT_SECRET_KEY"] = os.getenv("JWT_SECRET_KEY")
 
     # ========================
     # INITIALIZE EXTENSIONS
     # ========================
-
     db.init_app(app)
     jwt.init_app(app)
     bcrypt.init_app(app)
 
     CORS(app)
 
-
     # ========================
     # HOME ROUTE
     # ========================
-
     @app.route("/")
     def home():
         return {
             "message": "AI Facial Recognition Attendance API Running"
         }
-    
+
     # ========================
     # IMPORT MODELS
     # ========================
@@ -58,31 +53,35 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     from app.models.student_model import Student
     from app.models.faculty_model import Faculty
     from app.models.attendance_model import Attendance
+
     # ========================
     # CREATE DATABASE TABLES
     # ========================
-
     with app.app_context():
         db.create_all()
-#api test
+
+    # ========================
+    # REGISTER BLUEPRINTS
+    # ========================
     from app.routes.auth_routes import auth_bp
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
-    
+
     from app.routes.student_routes import student_bp
     app.register_blueprint(
-    student_bp,
-    url_prefix="/api/students"
-)
-    
+        student_bp,
+        url_prefix="/api/students"
+    )
+
     from app.routes.face_routes import face_bp
     app.register_blueprint(
-    face_bp,
-    url_prefix="/api/face"
-)
-    
+        face_bp,
+        url_prefix="/api/face"
+    )
+
     from app.routes.attendance_routes import attendance_bp
     app.register_blueprint(
-    attendance_bp,
-    url_prefix="/api/attendance"
-)
+        attendance_bp,
+        url_prefix="/api/attendance"
+    )
+
     return app
